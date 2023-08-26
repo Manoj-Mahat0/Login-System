@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Add this button within your existing login form -->
+<button id="loginWithFacebook">Login with Facebook</button>
+
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '139500992262442', // Replace with your actual App ID
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v13.0' // Use the desired version of the Facebook API
+        });
+
+  // Handle login with Facebook button click
+  document.getElementById('loginWithFacebook').addEventListener('click', function() {
+    FB.getLoginStatus(function(response) {
+      if (response.status === 'connected') {
+        // User is already logged in with Facebook
+        // You can retrieve the access token from response.authResponse.accessToken
+      } else {
+        FB.login(function(response) {
+          if (response.authResponse) {
+            // User is now logged in with Facebook
+            // Send the access token to the server for verification
+            const accessToken = response.authResponse.accessToken;
+            // Send accessToken to your server using AJAX or fetch
+            // Example: sendAccessTokenToServer(accessToken);
+          } else {
+            // User cancelled the login or did not grant permissions
+            console.log('User cancelled login or did not fully authorize.');
+          }
+        }, { scope: 'public_profile,email' }); // Request necessary permissions
+      }
+    });
+  });
+};
+
+// Load the Facebook SDK asynchronously
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = 'https://connect.facebook.net/en_US/sdk.js';
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+</body>
+</html>
